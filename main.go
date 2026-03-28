@@ -24,17 +24,20 @@ func main() {
 
 	// /start
 	bot.Handle("/start", func(c tele.Context) error {
+		log.Printf("[/start] user=%d username=@%s", c.Sender().ID, c.Sender().Username)
 		return c.Send("Привет! 👋 Я тестовый бот на Go.\n\nДоступные команды:\n/start — приветствие\n/help — помощь\n/echo — повтори текст")
 	})
 
 	// /help
 	bot.Handle("/help", func(c tele.Context) error {
+		log.Printf("[/help] user=%d username=@%s", c.Sender().ID, c.Sender().Username)
 		return c.Send("Список команд:\n/start — начать\n/help — помощь\n/echo <текст> — бот повторит твой текст")
 	})
 
 	// /echo
 	bot.Handle("/echo", func(c tele.Context) error {
 		args := c.Args()
+		log.Printf("[/echo] user=%d args=%v", c.Sender().ID, args)
 		if len(args) == 0 {
 			return c.Send("Напиши что-нибудь после /echo, например: /echo Привет мир")
 		}
@@ -47,6 +50,7 @@ func main() {
 
 	// любое текстовое сообщение
 	bot.Handle(tele.OnText, func(c tele.Context) error {
+		log.Printf("[message] user=%d username=@%s text=%q", c.Sender().ID, c.Sender().Username, c.Text())
 		return c.Send("Ты написал: " + c.Text() + "\n\nИспользуй /help чтобы увидеть команды.")
 	})
 
